@@ -48,7 +48,12 @@ public class ShoppingListServlet extends HttpServlet {
                  forward(request, response);
         }
      
-        ArrayList<String> shoppingList = new ArrayList<>();
+        ArrayList<String> shoppingList = (ArrayList<String>) session.getAttribute("shoppingList");
+        
+        if(shoppingList == null)
+        {
+            shoppingList = new ArrayList();
+        }
         switch(action)
         {
             case "register":
@@ -57,25 +62,32 @@ public class ShoppingListServlet extends HttpServlet {
             
             break;
             case "add": 
-                    String items = request.getParameter("addItem");
+                    String items = request.getParameter("addToList");
                     shoppingList.add(items);
+                    //request.setAttribute("shoppingList", shoppingList);
                     session.setAttribute("shoppingList", shoppingList);
                     getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").
                     forward(request, response);
-            break;           
-         /*   default:
+            break;
+            case "delete":
+                
+                for(int i = 0; i<shoppingList.size();i++)
+                {
+                    shoppingList.remove(i);
+                }
                 getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").
-                 forward(request, response);*/
-        } 
-     /*  if(action.equals("add"))
-        {
-            String items = request.getParameter("addItem");
-            shoppingList.add(items);
-            session.setAttribute("list", shoppingList);
-            getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").
+                forward(request, response);
+            case "logout":   
+                
+                   String loggedOut = "You successfully logged out";
+                   session.removeAttribute("username");
+                   session.invalidate();
+                   request.setAttribute("successfulLogOut",loggedOut);
+                  
+                   getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").
                  forward(request, response);
-            return;
-        }*/
+                   
+        } 
         
         getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").
                  forward(request, response);

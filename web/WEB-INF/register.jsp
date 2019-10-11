@@ -18,6 +18,7 @@
                 Username: <input type="text" name="user" size="25" value="${userValue}">
                 <input type="submit" value="Register name">
                 <input type="hidden" value="register">
+                <br>${successfulLogOut}
             </form>
         </div>
     </body>
